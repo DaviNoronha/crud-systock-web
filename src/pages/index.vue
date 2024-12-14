@@ -14,4 +14,12 @@
 
 <script setup lang="ts">
   import "@/assets/main.css";
+  import { definePage } from "unplugin-vue-router/runtime";
+
+  definePage({
+    alias: ['/n/:name'],
+    meta: {
+      requiresAuth: true,
+    },
+  })
 </script>

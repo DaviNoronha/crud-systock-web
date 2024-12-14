@@ -1,22 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import axios from "@/axios";
+import http from "@/http";
 
 class BaseService {
 
   get(endpoint: string): Promise<any> {
-    return axios.get(`${endpoint}`);
+    return http.get(`${endpoint}`);
   }
 
   post(endpoint: string, data: any): Promise<any> {
-    return axios.post(`${endpoint}`, data);
+    return http.post(`${endpoint}`, data);
   }
 
   put(endpoint: string, data: any): Promise<any> {
-    return axios.put(`${endpoint}`, data);
+    return http.put(`${endpoint}`, data);
   }
 
   delete(endpoint: string): Promise<any> {
-    return axios.delete(`${endpoint}`);
+    return http.delete(`${endpoint}`);
   }
 }
 

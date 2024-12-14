@@ -22,94 +22,10 @@
             <v-toolbar flat>
               <v-toolbar-title>Usuários</v-toolbar-title>
 
+              <v-btn class="mb-2" color="primary" dark @click="openForm(null)">
+                Cadastrar Usuário
+              </v-btn>
               <v-spacer></v-spacer>
-
-              <v-dialog v-model="dialog" max-width="900px">
-                <template v-slot:activator="{ props }">
-                  <v-btn class="mb-2" color="primary" dark v-bind="props">
-                    Cadastrar Usuário
-                  </v-btn>
-                </template>
-                <v-card>
-                  <v-card-title>
-                    <span class="text-h5">{{ formTitle }}</span>
-                  </v-card-title>
-
-                  <v-card-text>
-                    <v-container>
-                      <v-row>
-                        <v-col cols="12" md="6" sm="6">
-                          <v-text-field
-                            v-model="form.nome"
-                            label="Nome"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" md="6" sm="6">
-                          <v-text-field
-                            v-model="form.email"
-                            label="E-mail"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" md="4" sm="6">
-                          <v-text-field
-                            v-model="form.cpf"
-                            label="CPF"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col cols="12" md="4" sm="6">
-                          <v-select
-                            v-model="form.perfil"
-                            :items="perfis"
-                            item-value="nome"
-                            item-title="descricao"
-                            label="Perfil"
-                          ></v-select>
-                        </v-col>
-                        <v-col cols="12" md="4" sm="6">
-                          <v-text-field
-                            v-model="form.password"
-                            label="Senha"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                    </v-container>
-                  </v-card-text>
-
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="blue-darken-1" variant="text" @click="close">
-                      Cancelar
-                    </v-btn>
-                    <v-btn color="blue-darken-1" variant="text" @click="save">
-                      Salvar
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
-
-              <v-dialog v-model="dialogDelete" max-width="500px">
-                <v-card class="py-4 px-2">
-                  <v-card-title class="text-h5">
-                    Tem certeza que deseja excluir o usuário?
-                  </v-card-title>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                      color="blue-darken-1"
-                      variant="text"
-                      @click="closeDelete"
-                      >Cancelar</v-btn
-                    >
-                    <v-btn
-                      color="blue-darken-1"
-                      variant="text"
-                      @click="deleteUserConfirm"
-                      >Confirmar</v-btn
-                    >
-                    <v-spacer></v-spacer>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
             </v-toolbar>
           </template>
 
@@ -151,6 +67,73 @@
       </v-col>
     </v-row>
   </v-container>
+
+  <v-dialog v-model="dialog" max-width="900px">
+    <v-card>
+      <v-card-title>
+        <span class="text-h5">{{ formTitle }}</span>
+      </v-card-title>
+
+      <v-card-text>
+        <v-container>
+          <v-row>
+            <v-col cols="12" md="6" sm="6">
+              <v-text-field v-model="form.nome" label="Nome"></v-text-field>
+            </v-col>
+            <v-col cols="12" md="6" sm="6">
+              <v-text-field v-model="form.email" label="E-mail"></v-text-field>
+            </v-col>
+            <v-col cols="12" md="4" sm="6">
+              <v-text-field v-model="form.cpf" label="CPF"></v-text-field>
+            </v-col>
+            <v-col cols="12" md="4" sm="6">
+              <v-select
+                v-model="form.perfil"
+                :items="perfis"
+                item-value="nome"
+                item-title="descricao"
+                label="Perfil"
+              ></v-select>
+            </v-col>
+            <v-col cols="12" md="4" sm="6">
+              <v-text-field
+                v-model="form.password"
+                label="Senha"
+              ></v-text-field>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card-text>
+
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="blue-darken-1" variant="text" @click="close">
+          Cancelar
+        </v-btn>
+        <v-btn color="blue-darken-1" variant="text" @click="save">
+          Salvar
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <v-dialog v-model="dialogDelete" max-width="500px">
+    <v-card class="py-4 px-2">
+      <v-card-title class="text-h5">
+        Tem certeza que deseja excluir o usuário?
+      </v-card-title>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="blue-darken-1" variant="text" @click="closeDelete"
+          >Cancelar</v-btn
+        >
+        <v-btn color="blue-darken-1" variant="text" @click="deleteUserConfirm"
+          >Confirmar</v-btn
+        >
+        <v-spacer></v-spacer>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script lang="ts">
@@ -249,13 +232,15 @@ export default {
         });
     },
 
-    openForm(user) {
-      this.rowId = user.id;
-      this.form = Object.assign({}, user);
+    openForm(user: any) {
+      if (user) {
+        this.rowId = user.id;
+        this.form = Object.assign({}, user);
+      }
       this.dialog = true;
     },
 
-    deleteUser(user) {
+    deleteUser(user: any) {
       this.rowId = user.id;
       this.form = Object.assign({}, user);
       this.dialogDelete = true;
