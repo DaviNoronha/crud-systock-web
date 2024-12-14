@@ -1,16 +1,6 @@
 <template>
   <v-container class="align-center fill-height mx-auto" max-width="1800">
     <v-row>
-      <v-col cols="12">
-        <div class="text-center">
-          <div class="text-body-2 font-weight-light mb-n1">Crud</div>
-
-          <h1 class="text-h2 font-weight-bold">Systock</h1>
-        </div>
-
-        <div class="py-4" />
-      </v-col>
-
       <Cards
         :total="total"
         :totalAdmin="totalAdmin"

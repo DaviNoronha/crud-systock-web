@@ -12,6 +12,6 @@
     <UserTable />
 </template>
 
-<script setup>
-import "@/assets/main.css";
+<script setup lang="ts">
+  import "@/assets/main.css";
 </script>
