@@ -11,14 +11,18 @@ import { registerPlugins } from '@/plugins'
 import App from './App.vue'
 
 // Composables
-import { createApp } from 'vue'
+import { createApp, markRaw } from 'vue'
+import { createPinia } from 'pinia'
+import router from './router'
 
 const app = createApp(App)
 
-import { createPinia } from 'pinia'
 const pinia = createPinia()
-app.use(pinia)
+pinia.use(({store}) => {
+    store.router = markRaw(router)
+})
 
+app.use(pinia)
 
 registerPlugins(app)
 

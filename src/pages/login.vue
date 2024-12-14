@@ -8,7 +8,7 @@
       max-width="448"
       rounded="lg"
     >
-      <v-form validate-on="blur" @submit.prevent="login" ref="form">
+      <v-form validate-on="blur" @submit.prevent="login(loginForm)" ref="form">
         <div class="text-subtitle-1 text-medium-emphasis">E-mail</div>
 
         <v-text-field
@@ -60,19 +60,17 @@
 
 <script lang="ts">
 import { useAuthStore } from "@/store/auth";
-import BaseService from "@/services/BaseService";
 import { validateEmail, validatePassword } from "@/utils/rules";
+import { storeToRefs } from "pinia";
 
-const { storeToken } = useAuthStore();
+const { errors } = storeToRefs(useAuthStore());
+const { login } = useAuthStore();
 
 export default {
   data: () => ({
     visible: false,
-    storeToken,
-    errors: {
-      enabled: false,
-      message: "",
-    },
+    login,
+    errors,
     loginForm: {
       email: "",
       password: "",
@@ -82,20 +80,6 @@ export default {
   }),
 
   methods: {
-    login(formLogin: any) {
-      if (this.$refs.form.isValid) {
-        BaseService.post("login", formLogin)
-          .then((response) => {
-            console.log(response.data);
-          })
-          .catch((err) => {
-            this.errors = {
-              enabled: true,
-              message: err.response.data.message,
-            };
-          });
-      }
-    },
     clearErrors() {
       this.errors = {
         enabled: false,
