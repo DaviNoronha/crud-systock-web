@@ -83,7 +83,7 @@ import { validateCPF, validateEmail, validateNome, validatePassword, validatePer
 import Snackbar from "./Snackbar.vue";
 
 export default {
-  emits: ["load-users"],
+  emits: ["update"],
   data: () => ({
     dialog: false,
     dialogDelete: false,
@@ -165,7 +165,7 @@ export default {
         BaseService.post(`users`, this.form)
           .then((res) => {
             this.$refs.snackbar.openSnackbar(true, "Usuário cadastrado com sucesso");
-            this.$emit("load-users", 1);
+            this.$emit("update", {page: 1, itemsPerPage: 10, sortBy: [{ key: 'nome', order: 'asc' }]});
             this.close();
           })
           .catch((err) => {
@@ -178,7 +178,7 @@ export default {
         BaseService.put(`users/${this.rowId}`, this.form)
           .then((res) => {
             this.$refs.snackbar.openSnackbar(true, "Usuário atualizado com sucesso");
-            this.$emit("load-users", 1);
+            this.$emit("update", {page: 1, itemsPerPage: 10, sortBy: [{ key: 'nome', order: 'asc' }]});
             this.close();
           })
           .catch((err) => {

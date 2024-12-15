@@ -14,8 +14,10 @@
           :items="users"
           :items-length="total"
           :loading="loading"
+          loading-text="Buscando usuários..."
           :search="search"
           item-value="nome"
+          :sort-by="sortBy"  
           height="550px"
           @update:options="loadUsers"
         >
@@ -64,9 +66,9 @@
     </v-row>
   </v-container>
 
-  <UserForm @load-users="loadUsers" :perfis="perfis" ref="userForm"/>
-  <UserDelete @load-users="loadUsers" ref="userDelete"/>
-  <Snackbar ref="snackbar"/>
+  <UserForm @update="loadUsers" :perfis="perfis" ref="userForm" />
+  <UserDelete @update="loadUsers" ref="userDelete" />
+  <Snackbar ref="snackbar" />
 </template>
 
 <script lang="ts">
@@ -74,12 +76,15 @@ import BaseService from "@/services/BaseService";
 import UserForm from "./UserForm.vue";
 import UserDelete from "./UserDelete.vue";
 import Snackbar from "./Snackbar.vue";
+import type User from "@/interfaces/User";
+import type Perfil from "@/interfaces/Perfil";
 
 export default {
   data: () => ({
     itemsPerPage: 10,
     dialog: false,
     dialogDelete: false,
+    sortBy: [{ key: 'nome', order: 'asc' }] as SortItem,
     headers: [
       { title: "Nome", key: "nome", align: "start" },
       { title: "CPF", key: "cpf", align: "end" },
@@ -87,9 +92,9 @@ export default {
       { title: "Adicionado(a) em", key: "created_at", align: "end" },
       { title: "Perfil", key: "perfil.descricao", align: "end" },
       { title: "Ações", key: "acoes", align: "end" },
-    ],
-    users: [],
-    perfis: [],
+    ] as const,
+    users: [] as User[],
+    perfis: []as Perfil[],
     loading: true,
     total: 0,
     totalAdmin: 0,
@@ -97,23 +102,32 @@ export default {
     search: "",
     UserForm,
     UserDelete,
-    Snackbar
+    Snackbar,
   }),
 
-  watch: {
-    nome() {
-      this.search = String(Date.now());
-    },
+  mounted() {
+    this.loadPerfis();
   },
 
-  methods: {
-    loadUsers({ page, itemsPerPage = 10 }) {
-      this.loading = true;
-      BaseService.get(`users?pagination=${itemsPerPage}&page=${page}`)
-        .then((res) => {
-          const items = res.data.data;
 
-          this.users = items;
+  methods: {
+    loadPerfis() {
+      BaseService.get("perfis")
+        .then((res) => {
+          this.perfis = res.data;
+        })
+        .catch((err) => {
+          this.$refs.snackbar.openSnackbar(false, err.response.data.message);
+        });
+    },
+
+    loadUsers({ page, itemsPerPage, sortBy }) {
+      this.loading = true;
+      const queryUrl = `users?pagination=${itemsPerPage}&page=${page}&key=${sortBy[0].key}&order=${sortBy[0].order}`;
+
+      BaseService.get(queryUrl)
+        .then((res) => {
+          this.users = res.data.data;
           this.loading = false;
         })
         .catch((err) => {
@@ -126,14 +140,6 @@ export default {
           this.total = response.admin + response.usuario;
           this.totalAdmin = response.admin;
           this.totalUsuarios = response.usuario;
-        })
-        .catch((err) => {
-          this.$refs.snackbar.openSnackbar(false, err.response.data.message);
-        });
-
-      BaseService.get(`perfis`)
-        .then((res) => {
-          this.perfis = res.data;
         })
         .catch((err) => {
           this.$refs.snackbar.openSnackbar(false, err.response.data.message);

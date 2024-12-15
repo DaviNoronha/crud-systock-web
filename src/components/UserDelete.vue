@@ -24,7 +24,7 @@
 import BaseService from "@/services/BaseService";
 
 export default {
-  emits: ["load-users"],
+  emits: ["update"],
   data: () => ({
     dialogDelete: false,
     loading: false,
@@ -63,7 +63,7 @@ export default {
       BaseService.delete(`users/${this.rowId}`)
         .then(() => {
           this.$refs.snackbar.openSnackbar(true, "Usuário excluído com sucesso");
-          this.$emit("load-users", 1);
+          this.$emit("update", {page: 1, itemsPerPage: 10, sortBy: [{ key: 'nome', order: 'asc' }]});
         })
         .catch((err) => {
           this.$refs.snackbar.openSnackbar(false, err.response.data.message);
