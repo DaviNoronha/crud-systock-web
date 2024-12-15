@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@mdi/font": "7.4.47",
+    "@ssibrahimbas/v-mask": "^1.0.0",
     "axios": "^1.7.9",
     "core-js": "^3.37.1",
     "pinia": "^2.3.0",

@@ -1,5 +1,5 @@
 <template>
-  <v-container class="align-center fill-height mx-auto" max-width="1800">
+  <v-container class="align-center mx-auto" max-width="1800">
     <v-row>
       <Cards
         :total="total"
@@ -16,13 +16,23 @@
           :loading="loading"
           :search="search"
           item-value="nome"
+          height="550px"
           @update:options="loadUsers"
         >
           <template v-slot:top>
-            <v-toolbar flat>
-              <v-toolbar-title>Usuários</v-toolbar-title>
+            <v-toolbar flat class="d-flex align-center gap-4">
+              <v-toolbar-title>
+                <v-icon icon="mdi-account"></v-icon> &nbsp; Usuários
+              </v-toolbar-title>
               <v-spacer></v-spacer>
 
+              <v-text-field
+                v-model="search"
+                class=""
+                density="compact"
+                placeholder="Buscar por nome..."
+                hide-details
+              ></v-text-field>
               <v-btn color="primary" dark @click="openForm(null)">
                 Cadastrar Usuário
               </v-btn>
@@ -49,20 +59,6 @@
               mdi-delete
             </v-icon>
           </template>
-
-          <template v-slot:tfoot>
-            <tr>
-              <td>
-                <v-text-field
-                  v-model="search"
-                  class="ma-2"
-                  density="compact"
-                  placeholder="Buscar por nome..."
-                  hide-details
-                ></v-text-field>
-              </td>
-            </tr>
-          </template>
         </v-data-table-server>
       </v-col>
     </v-row>
@@ -70,7 +66,7 @@
 
   <UserForm @load-users="loadUsers" :perfis="perfis" ref="userForm"/>
   <UserDelete @load-users="loadUsers" ref="userDelete"/>
-  <Snackbar />
+  <Snackbar ref="snackbar"/>
 </template>
 
 <script lang="ts">
@@ -111,9 +107,9 @@ export default {
   },
 
   methods: {
-    loadUsers({ page }) {
+    loadUsers({ page, itemsPerPage = 10 }) {
       this.loading = true;
-      BaseService.get(`users?page=${page}`)
+      BaseService.get(`users?pagination=${itemsPerPage}&page=${page}`)
         .then((res) => {
           const items = res.data.data;
 

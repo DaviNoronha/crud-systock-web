@@ -10,7 +10,7 @@
         <v-btn color="blue-darken-1" variant="text" @click="closeDelete"
           >Cancelar</v-btn
         >
-        <v-btn color="red-lighten-1" variant="text" @click="deleteUserConfirm"
+        <v-btn color="red-lighten-1" variant="text" @click="deleteUserConfirm" :loading="loading"
           >Confirmar</v-btn
         >
       </template>
@@ -27,7 +27,7 @@ export default {
   emits: ["load-users"],
   data: () => ({
     dialogDelete: false,
-    loading: true,
+    loading: false,
     rowId: "",
     form: {
       nome: "",
@@ -59,6 +59,7 @@ export default {
     },
 
     deleteUserConfirm() {
+      this.loading = true;
       BaseService.delete(`users/${this.rowId}`)
         .then(() => {
           this.$refs.snackbar.openSnackbar(true, "Usuário excluído com sucesso");
@@ -66,8 +67,11 @@ export default {
         })
         .catch((err) => {
           this.$refs.snackbar.openSnackbar(false, err.response.data.message);
+        })
+        .finally(() => {
+          this.loading = false;
+          this.closeDelete();
         });
-      this.closeDelete();
     },
 
     closeDelete() {

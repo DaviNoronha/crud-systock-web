@@ -25,7 +25,6 @@
                   :rules="validateEmail"
                   :error="errors.enabled"
                   :error-messages="errors.message"
-                  required
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="4" sm="6">
@@ -35,7 +34,7 @@
                   :rules="validateCPF"
                   :error="errors.enabled"
                   :error-messages="errors.message"
-                  required
+                  v-mask="['###.###.###-##']"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" md="4" sm="6">
@@ -48,7 +47,6 @@
                   :rules="validatePerfil"
                   :error="errors.enabled"
                   :error-messages="errors.message"
-                  required
                 ></v-select>
               </v-col>
               <v-col cols="12" md="4" sm="6">
@@ -58,7 +56,6 @@
                   :rules="rowId ? [] : validatePassword"
                   :error="errors.enabled"
                   :error-messages="errors.message"
-                  required
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -70,7 +67,7 @@
           <v-btn color="red-darken-1" variant="text" @click="close">
             Cancelar
           </v-btn>
-          <v-btn color="blue-darken-1" variant="text" type="submit">
+          <v-btn color="blue-darken-1" variant="text" type="submit" :loading="loading">
             Salvar
           </v-btn>
         </v-card-actions>
@@ -90,7 +87,7 @@ export default {
   data: () => ({
     dialog: false,
     dialogDelete: false,
-    loading: true,
+    loading: false,
     rowId: "",
     form: {
       nome: "",
@@ -162,28 +159,34 @@ export default {
       if (!this.$refs.form.isValid) {
         return;
       }
+
+      this.loading = true;
       if (!this.rowId) {
         BaseService.post(`users`, this.form)
           .then((res) => {
-            this.close();
             this.$refs.snackbar.openSnackbar(true, "Usuário cadastrado com sucesso");
             this.$emit("load-users", 1);
+            this.close();
           })
           .catch((err) => {
             this.$refs.snackbar.openSnackbar(false, err.response.data.message);
           })
-          .finally(() => {});
+          .finally(() => {
+            this.loading = false;
+          })
       } else {
         BaseService.put(`users/${this.rowId}`, this.form)
           .then((res) => {
-            this.close();
             this.$refs.snackbar.openSnackbar(true, "Usuário atualizado com sucesso");
             this.$emit("load-users", 1);
+            this.close();
           })
           .catch((err) => {
             this.$refs.snackbar.openSnackbar(false, err.response.data.message);
           })
-          .finally(() => {});
+          .finally(() => {
+            this.loading = false;
+          })
       }
     },
   },
