@@ -6,7 +6,7 @@
           class="py-6"
           color="surface-variant"
           image="https://cdn.vuetifyjs.com/docs/images/one/create/feature.png"
-          prepend-icon="mdi-rocket-launch-outline"
+          prepend-icon="mdi-account-group"
           rounded="lg"
           variant="outlined"
         >
@@ -19,7 +19,7 @@
           </template>
 
           <template #subtitle>
-            <div class="text-subtitle-1">Total</div>
+            <div class="info-card-title text-subtitle-1">Total</div>
           </template>
 
           <v-overlay
@@ -37,7 +37,7 @@
           class="py-6"
           color="surface-variant"
           image="https://cdn.vuetifyjs.com/docs/images/one/create/feature.png"
-          prepend-icon="mdi-rocket-launch-outline"
+          prepend-icon="mdi-shield-account"
           rounded="lg"
           variant="outlined"
         >
@@ -50,7 +50,7 @@
           </template>
 
           <template #subtitle>
-            <div class="text-subtitle-1">Administradores</div>
+            <div class="info-card-title text-subtitle-1">Administradores</div>
           </template>
 
           <v-overlay
@@ -68,7 +68,7 @@
           class="py-6"
           color="surface-variant"
           image="https://cdn.vuetifyjs.com/docs/images/one/create/feature.png"
-          prepend-icon="mdi-rocket-launch-outline"
+          prepend-icon="mdi-account"
           rounded="lg"
           variant="outlined"
         >
@@ -81,7 +81,7 @@
           </template>
 
           <template #subtitle>
-            <div class="text-subtitle-1">Usuários</div>
+            <div class="info-card-title text-subtitle-1">Usuários</div>
           </template>
 
           <v-overlay

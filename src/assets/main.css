@@ -31,4 +31,8 @@
     .v-data-table tr:not(:first-child) > td:first-child {
       border-top: medium solid rgba(var(--v-border-color), var(--v-border-opacity));
     }
+  
+    .info-card-title {
+      display: none;
+    }
   }

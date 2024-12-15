@@ -1,25 +1,39 @@
 <template>
-    <v-col cols="12">
-      <div class="text-center">
-        <div class="text-body-2 font-weight-light mb-n1">Crud</div>
+  <v-app-bar :elevation="2" rounded>
+    <v-app-bar-title>Crud Systock</v-app-bar-title>
 
-        <h1 class="text-h2 font-weight-bold">Systock</h1>
-      </div>
+    <template v-slot:append>
+      <v-menu>
+        <template v-slot:activator="{ props }">
+          <v-btn icon="mdi-dots-vertical" v-bind="props"></v-btn>
+        </template>
+        <v-list>
+          <v-list-item>
+            <v-list-item-title>
+              <v-form @submit.prevent="authStore.logout">
+                <v-btn type="submit">Sair</v-btn>
+              </v-form>
+            </v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </template>
+  </v-app-bar>
 
-      <div class="py-4" />
-    </v-col>
-
-    <UserTable />
+  <UserTable />
 </template>
 
 <script setup lang="ts">
-  import "@/assets/main.css";
-  import { definePage } from "unplugin-vue-router/runtime";
+import "@/assets/main.css";
+import { definePage } from "unplugin-vue-router/runtime";
+import { useAuthStore } from "@/store/auth";
 
-  definePage({
-    alias: ['/n/:name'],
-    meta: {
-      requiresAuth: true,
-    },
-  })
+const authStore = useAuthStore();
+
+definePage({
+  alias: ["/n/:name"],
+  meta: {
+    requiresAuth: true,
+  },
+});
 </script>

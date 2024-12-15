@@ -23,8 +23,8 @@ export const useAuthStore = defineStore("authStore", {
     async login(loginForm: any) {
       BaseService.post("login", loginForm)
         .then((response) => {
-            localStorage.setItem('token', response.data)
-            localStorage.setItem('email', response.data)
+            localStorage.setItem('token', response.data);
+            localStorage.setItem('email', loginForm.email);
 
             this.token = response.data;
             this.email = loginForm.email;
@@ -37,6 +37,11 @@ export const useAuthStore = defineStore("authStore", {
             message: err.response.data.message,
           };
         });
+    },
+    async logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('email');
+      router.push("/login");
     },
     success() {
       http.defaults.headers.common["Authorization"] = "Bearer " + this.token;
